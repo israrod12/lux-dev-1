@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { getAuthToken } from "@/lib/diditAuth";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";  // Updated import
+import { authOptions } from "@/lib/auth";
 
-export async function POST() {
+export async function POST(request: Request) {
   try {
     const accessToken = await getAuthToken();
     const session = await getServerSession(authOptions);
@@ -12,14 +12,26 @@ export async function POST() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { isIframe } = await request.json();
+
     const url = `${process.env.NEXT_VERIFICATION_BASE_URL}/v1/session/`;
 
-    const body = {
+    const body: {
+      vendor_data: string;
+      callback?: string;
+      // features?: string;
+    } = {
       vendor_data: session.user.email,
-      callback: process.env.VERIFICATION_CALLBACK_URL,
-      features: process.env.VERIFICATION_FEATURES,
-      document_types: process.env.VERIFICATION_DOCUMENT_TYPES,
     };
+
+    if (!isIframe) {
+      body.callback = process.env.VERIFICATION_CALLBACK_URL;
+    }
+
+    // If you want to include features, uncomment this line:
+    // body.features = process.env.VERIFICATION_FEATURES;
+
+    console.log("Request body:", body);
 
     const requestOptions = {
       method: "POST",
