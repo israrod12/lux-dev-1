@@ -1,35 +1,36 @@
-import { createHmac } from "crypto";
+import { createHmac, timingSafeEqual } from "crypto";
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-function encodeData<T>(data: T): Buffer {
-  const formattedData = JSON.stringify(data);
-  return Buffer.from(formattedData, "utf-8");
-}
-
 function verifySignature(
-  encodedData: Buffer,
+  rawBody: string,
   receivedSignature: string,
+  timestamp: number,
   secret: string
 ): boolean {
-  const computedSignature = createHmac("sha256", secret)
-    .update(encodedData)
+  const now = Math.floor(Date.now() / 1000);
+  if (Math.abs(now - timestamp) > 300) {
+    return false;
+  }
+
+  const expectedSignature = createHmac("sha256", secret)
+    .update(rawBody)
     .digest("hex");
 
-  return computedSignature === receivedSignature;
-}
+  const expectedSignatureBuffer = Buffer.from(expectedSignature, "hex");
+  const providedSignatureBuffer = Buffer.from(receivedSignature, "hex");
 
-function verifyTimestamp(timestamp: number): boolean {
-  const now = Math.round(Date.now() / 1000);
-  const fiveMinutes = 5 * 60;
-
-  return now - timestamp <= fiveMinutes;
+  return (
+    expectedSignatureBuffer.length === providedSignatureBuffer.length &&
+    timingSafeEqual(expectedSignatureBuffer, providedSignatureBuffer)
+  );
 }
 
 export async function POST(request: NextRequest) {
-  const body = await request.json();
+  const rawBody = await request.text();
+  const body = JSON.parse(rawBody);
 
   console.log("webhook body", body);
 
@@ -40,13 +41,8 @@ export async function POST(request: NextRequest) {
   }
 
   const timestamp = body.created_at;
-  if (!verifyTimestamp(timestamp)) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-  }
 
-  const encodedData = encodeData(body);
-
-  if (verifySignature(encodedData, signature, secret)) {
+  if (verifySignature(rawBody, signature, timestamp, secret)) {
     const { session_id, status, vendor_data: email } = body;
 
     // Find the user by email
