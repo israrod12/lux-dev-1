@@ -12,7 +12,7 @@ export async function POST(request: Request) {
 
     const { isIframe } = await request.json();
 
-    const url = `${process.env.NEXT_VERIFICATION_BASE_URL}/v1/session/`;
+    const url = `${process.env.NEXT_VERIFICATION_BASE_URL}/v2/session/`;
 
     const body: {
       workflow_id: string;
