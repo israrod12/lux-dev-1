@@ -25,7 +25,7 @@ npm install
 
 Before running the application, you'll need to get some environment variables:
 
-1. Visit [https://business.didit.me](https://business.didit.me) to obtain your `CLIENT_ID`, `CLIENT_SECRET`, and `SHARED_SECRET_KEY` (for handling webhooks).
+1. Visit [https://business.didit.me](https://business.didit.me) to obtain your `API_KEY`, and `SHARED_SECRET_KEY` (for handling webhooks).
 2. In the application's advanced settings, correctly configure `WEBHOOK_URL` to point to your server. For development purposes, you might use:
    - `WEBHOOK_URL` = `https://yourapp.com/api/webhook`
 
@@ -34,9 +34,9 @@ Before running the application, you'll need to get some environment variables:
 Duplicate the `.env.example` file, rename the duplicate to `.env`, and fill in the environment variables you obtained from the step above. Your `.env` file will look something like this:
 
 ```plaintext
-CLIENT_ID=<YourClientId>
-CLIENT_SECRET=<YourClientSecret>
+API_KEY=<YourApiKey>
 SHARED_SECRET_KEY=<YourSharedSecretKey>
+VERIFICATION_WORKFLOW_ID=<YourVerificationWorkflowId>
 # Add any other environment variables as needed.
 ```
 

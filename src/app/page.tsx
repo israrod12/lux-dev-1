@@ -69,8 +69,9 @@ export default function Home() {
   };
 
   const isConfigInvalid =
-    process.env.NEXT_PUBLIC_DIDIT_CLIENT_ID === "your_client_id" ||
-    process.env.NEXT_PUBLIC_DIDIT_CLIENT_ID === "";
+    process.env.API_KEY === "" ||
+    process.env.SHARED_SECRET_KEY === "" ||
+    process.env.VERIFICATION_WORKFLOW_ID === "";
 
   if (isConfigInvalid) {
     return (
@@ -83,9 +84,9 @@ export default function Home() {
               Please set the following environment variables in your .env file:
             </p>
             <ul className="list-disc list-inside mt-2">
-              <li>NEXT_PUBLIC_DIDIT_CLIENT_ID</li>
-              <li>CLIENT_SECRET</li>
-              <li>WEBHOOK_SECRET_KEY</li>
+              <li>API_KEY</li>
+              <li>SHARED_SECRET_KEY</li>
+              <li>VERIFICATION_WORKFLOW_ID</li>
             </ul>
             <p className="mt-2">
               One or more of these variables are either not set or have invalid

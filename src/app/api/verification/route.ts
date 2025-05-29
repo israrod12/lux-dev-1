@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
-import { getAuthToken } from "@/lib/diditAuth";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 
 export async function POST(request: Request) {
   try {
-    const accessToken = await getAuthToken();
     const session = await getServerSession(authOptions);
 
     if (!session || !session.user?.email) {
@@ -17,10 +15,11 @@ export async function POST(request: Request) {
     const url = `${process.env.NEXT_VERIFICATION_BASE_URL}/v1/session/`;
 
     const body: {
+      workflow_id: string;
       vendor_data: string;
       callback?: string;
-      // features?: string;
     } = {
+      workflow_id: process.env.VERIFICATION_WORKFLOW_ID ?? "", // Add workflow_id to the body
       vendor_data: session.user.email,
     };
 
@@ -28,16 +27,11 @@ export async function POST(request: Request) {
       body.callback = process.env.VERIFICATION_CALLBACK_URL;
     }
 
-    // If you want to include features, uncomment this line:
-    // body.features = process.env.VERIFICATION_FEATURES;
-
-    console.log("Request body:", body);
-
     const requestOptions = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
+        "X-API-Key": `${process.env.API_KEY}`,
       },
       body: JSON.stringify(body),
     };
