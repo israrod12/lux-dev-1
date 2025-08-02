@@ -40,6 +40,3 @@ next-env.d.ts
 
 # .gitignore
 
-# Ignorar base de datos local de Prisma
-prisma/dev.db
-
