@@ -37,3 +37,11 @@ next-env.d.ts
 
 # env
 .env
+
+# .gitignore
+
+# Ignorar base de datos local de Prisma
+prisma/dev.db
+
+# (opcional) Ignorar migraciones si no quieres versionarlas
+prisma/migrations/
