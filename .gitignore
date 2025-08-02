@@ -43,5 +43,3 @@ next-env.d.ts
 # Ignorar base de datos local de Prisma
 prisma/dev.db
 
-# (opcional) Ignorar migraciones si no quieres versionarlas
-prisma/migrations/
