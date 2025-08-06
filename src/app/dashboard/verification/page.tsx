@@ -12,7 +12,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Label } from "@/components/ui/label";
+import { Label } from "@/components/ui/label"; 
 import {
   ExternalLink,
   RefreshCw,

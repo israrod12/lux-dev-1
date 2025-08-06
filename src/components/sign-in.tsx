@@ -32,12 +32,12 @@ export default function SignInForm() {
 
     try {
       const res = await signIn("credentials", {
-        email: userInfo.email,
+        email: userInfo.email, 
         password: userInfo.password,
         redirect: false,
         callbackUrl,
       });
-
+ 
       if (res?.error) {
         setError(res.error);
       } else if (res?.ok) {

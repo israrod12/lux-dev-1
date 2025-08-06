@@ -4,11 +4,13 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("POSTGRES_URL")
+  url      = env("DATABASE_URL")
 }
 
 model User {
   id                   String                @id @default(cuid())
+  firstName            String                @map("first_name")
+  lastName             String                @map("last_name")
   name                 String?
   email                String                @unique
   emailVerified        DateTime?
@@ -17,13 +19,77 @@ model User {
   isVerified           Boolean               @default(false)
   dateOfBirth          DateTime?
   documentExpiresAt    DateTime?
-  createdAt            DateTime              @default(now())
+  onboarding_complete  Boolean               @default(false)
+  createdAt            DateTime              @default(now()) @map("created_at")
   updatedAt            DateTime              @updatedAt
+
   accounts             Account[]
   sessions             Session[]
   verificationSessions VerificationSession[]
+  profile              Profile?
+  photos               Photo[]
+  videos               Video[]
+  calendarEvents       CalendarEvent[]
 
   @@map("users")
+}
+
+model Profile {
+  id           String    @id @default(cuid())
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String    @unique @map("user_id")  
+  model_name   String?    @unique
+  location     String?
+  nationality  String?
+  age          Int?
+  eye_color    String?
+  bust_size    String?
+  hip_size     String?
+  weight_kg    Float?
+  height_cm    Float?
+  language     String[]
+  description  String?
+  social       Json?
+  created_at   DateTime  @default(now())
+
+  @@map("profiles")
+}
+
+model Photo {
+  id         String   @id @default(cuid())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String   @map("user_id")
+  url        String
+  is_profile Boolean  @default(false)
+  is_cover   Boolean  @default(false)
+  created_at DateTime @default(now())
+
+  // Quité el @@unique con PartialIndex porque no es soportado en Prisma
+
+  @@map("photos")
+}
+
+model Video {
+  id         String   @id @default(cuid())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String   @map("user_id")
+  url        String
+  created_at DateTime @default(now())
+
+  @@map("videos")
+}
+
+model CalendarEvent {
+  id         String   @id @default(cuid())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String   @map("user_id")
+  country    String
+  place      String
+  start_date DateTime
+  end_date   DateTime
+  created_at DateTime @default(now())
+
+  @@map("calendar_events")
 }
 
 model VerificationSession {
