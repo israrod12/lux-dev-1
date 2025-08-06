@@ -19,13 +19,6 @@ export default withAuth(
 // Exclude API routes and Next.js special routes from middleware
 export const config = {
   matcher: [
-    // Match all paths except for:
-    // - /api routes
-    // - /_next (Next.js internals)
-    // - /static (static files)
-    // - /.*\\..* (files with extensions like .css, .js, .png)
-    // - /favicon.ico
-    // - /register (registration page)
-    "/((?!api/|_next/|static/|.*\\..*|favicon.ico|register).*)",
-  ],
+    "/((?!api/|_next/|static/|.*\\..*|favicon.ico|register|$).*)"
+  ],  
 };
