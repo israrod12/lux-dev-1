@@ -55,7 +55,7 @@ export default function SignInForm() {
     <Card className="w-full max-w-md">
       <CardHeader>
         <CardTitle className="text-2xl font-bold text-center">
-          Esto es una prueba1
+          Esto es una prueba3
         </CardTitle>
         <CardDescription className="text-center">
           Enter your email and password to access your account
