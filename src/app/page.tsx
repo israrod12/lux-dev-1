@@ -120,7 +120,7 @@ export default function Home() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          {!session?.user?.isVerified && (
+          
             <div className="space-y-4">
               <Alert>
                 <AlertTitle>Integration Options</AlertTitle>
@@ -269,7 +269,7 @@ export default function Home() {
                 )}
               </div>
             </div>
-          )}
+        
           <Button
             onClick={() => signOut({ callbackUrl: "/signin" })}
             variant="secondary"

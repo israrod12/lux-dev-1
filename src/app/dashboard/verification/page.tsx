@@ -104,7 +104,7 @@ export default function Home() {
         <CardHeader className="space-y-2">
           <div className="flex justify-between items-center">
             <CardTitle className="text-3xl font-bold">
-              Welcome, {session?.user?.name || session?.user?.email}!
+              Welcome PRUEBA, {session?.user?.name || session?.user?.email}!
             </CardTitle>
             {session?.user?.isVerified !== undefined && (
               <Badge
